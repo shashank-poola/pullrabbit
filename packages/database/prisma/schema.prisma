@@ -1,0 +1,176 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum InstallationStatus {
+  ACTIVE
+  SUSPENDED
+  REMOVED
+}
+
+enum SubscriptionProvider {
+  STRIPE
+  MANUAL
+}
+
+enum SubscriptionStatus {
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  INCOMPLETE
+}
+
+enum PlanName {
+  FREE
+  PRO
+  TEAM
+  ENTERPRISE
+}
+
+enum ReviewStatus {
+  QUEUED
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+enum CommentSeverity {
+  CRITICAL
+  HIGH
+  MEDIUM
+  LOW
+  INFO
+}
+
+enum CommentCategory {
+  BUG
+  SECURITY
+  PERFORMANCE
+  STYLE
+  REFACTOR
+  DOCUMENTATION
+  TEST
+  OTHER
+}
+
+model User {
+  id            String         @id @default(uuid())
+  githubUserId  BigInt         @unique
+  githubLogin   String         @unique
+  email         String?        @unique
+  name          String?
+  avatarUrl     String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  installations Installation[]
+}
+
+model Installation {
+  id                   String             @id @default(uuid())
+  userId               String
+  githubInstallationId BigInt             @unique
+  githubAccountId      BigInt
+  githubAccountLogin   String
+  githubAccountType    String
+  status               InstallationStatus @default(ACTIVE)
+  isPersonalAccount    Boolean            @default(false)
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  user                 User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  repositories         Repository[]
+  subscription         Subscription?
+
+  @@index([userId])
+  @@index([githubAccountId])
+}
+
+model Repository {
+  id                String        @id @default(uuid())
+  installationId    String
+  githubRepoId      BigInt        @unique
+  owner             String
+  name              String
+  fullName          String        @unique
+  defaultBranch     String
+  isPrivate         Boolean
+  isActive          Boolean       @default(true)
+  autoReviewEnabled Boolean       @default(true)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  installation      Installation  @relation(fields: [installationId], references: [id], onDelete: Cascade)
+  reviewSessions    ReviewSession[]
+
+  @@index([installationId])
+  @@index([owner, name])
+}
+
+model Subscription {
+  id                     String               @id @default(uuid())
+  installationId         String               @unique
+  provider               SubscriptionProvider @default(STRIPE)
+  planName               PlanName             @default(FREE)
+  status                 SubscriptionStatus   @default(TRIALING)
+  providerCustomerId     String?
+  providerSubscriptionId String?              @unique
+  currentPeriodStart     DateTime?
+  currentPeriodEnd       DateTime?
+  cancelAtPeriodEnd      Boolean              @default(false)
+  createdAt              DateTime             @default(now())
+  updatedAt              DateTime             @updatedAt
+
+  installation           Installation         @relation(fields: [installationId], references: [id], onDelete: Cascade)
+}
+
+model ReviewSession {
+  id             String        @id @default(uuid())
+  repositoryId   String
+  prNumber       Int
+  headSha        String?
+  baseBranch     String        @default("main")
+  status         ReviewStatus  @default(QUEUED)
+  summary        String?
+  filesReviewed  Int           @default(0)
+  totalComments  Int           @default(0)
+  githubReviewId BigInt?
+  errorMessage   String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  completedAt    DateTime?
+
+  repository     Repository    @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  comments       ReviewComment[]
+
+  @@index([repositoryId])
+  @@index([prNumber])
+  @@index([status])
+}
+
+model ReviewComment {
+  id              String           @id @default(uuid())
+  reviewSessionId String
+  filePath        String
+  line            Int
+  startLine       Int?
+  side            String           @default("RIGHT")
+  startSide       String?
+  title           String?
+  body            String
+  severity        CommentSeverity  @default(MEDIUM)
+  category        CommentCategory  @default(OTHER)
+  suggestion      String?
+  githubCommentId BigInt?
+  createdAt       DateTime         @default(now())
+
+  reviewSession   ReviewSession    @relation(fields: [reviewSessionId], references: [id], onDelete: Cascade)
+
+  @@index([reviewSessionId])
+  @@index([filePath])
+}

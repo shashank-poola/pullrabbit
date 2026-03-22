@@ -25,13 +25,17 @@
     "packages/*"
   ],
   "dependencies": {
+    "@prisma/adapter-pg": "^7.5.0",
+    "@prisma/client": "^7.5.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/pg": "^8.20.0",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "jwt": "^0.2.0",
+    "pg": "^8.20.0",
     "zod": "^4.3.6"
   }
 }

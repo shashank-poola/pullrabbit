@@ -65,7 +65,7 @@ type WorkerTestDeps = NonNullable<Parameters<typeof processReviewJob>[1]>
 
 function createJob(overrides: Partial<Job<ReviewJobData>> = {}) {
   return {
-    id: "review:session-1:attempt:1",
+    id: "review-session-1-attempt-1",
     data: jobData,
     attemptsMade: 0,
     opts: { attempts: MAX_REVIEW_ATTEMPTS },
@@ -159,7 +159,7 @@ describe("processReviewJob", () => {
     expect(sessionUpdateManyMock).toHaveBeenCalledTimes(1);
     expect(sessionUpdateManyMock).toHaveBeenCalledWith(expect.objectContaining({
       where: { id: "session-1", status: { in: ["QUEUED", "RETRYING"] } },
-      data: expect.objectContaining({ status: "RUNNING", jobId: "review:session-1:attempt:1" }),
+      data: expect.objectContaining({ status: "RUNNING", jobId: "review-session-1-attempt-1" }),
     }));
     expect(reviewGraphInvokeMock).not.toHaveBeenCalled();
     expect(sessionUpdateMock).not.toHaveBeenCalled();
@@ -216,7 +216,7 @@ describe("processReviewJob", () => {
 
   test("marks a terminal failure when the retry limit is reached", async () => {
     reviewGraphInvokeMock.mockRejectedValueOnce(new Error("provider failed"));
-    const terminalJobId = `review:session-1:attempt:${MAX_REVIEW_ATTEMPTS}`;
+    const terminalJobId = `review-session-1-attempt-${MAX_REVIEW_ATTEMPTS}`;
 
     await expect(processReviewJob(
       createJob({ attemptsMade: MAX_REVIEW_ATTEMPTS - 1, id: terminalJobId }),
@@ -243,7 +243,7 @@ describe("recoverReviewSessions", () => {
       headSha: "sha-2",
       baseBranch: "main",
       attemptCount: 1,
-      jobId: "review:session-2:attempt:1",
+      jobId: "review-session-2-attempt-1",
       repository: {
         id: "repo-2",
         owner: "octocat",
@@ -260,13 +260,13 @@ describe("recoverReviewSessions", () => {
     await recoverReviewSessions(createDeps());
 
     expect(sessionUpdateManyMock).toHaveBeenCalledWith({
-      where: { id: "session-2", jobId: "review:session-2:attempt:1" },
+      where: { id: "session-2", jobId: "review-session-2-attempt-1" },
       data: { jobId: null, leaseId: null },
     });
     expect(queueAddMock).toHaveBeenCalledWith(
       "review",
       expect.objectContaining({ reviewSessionId: "session-2" }),
-      { jobId: "review:session-2:attempt:2" },
+      { jobId: "review-session-2-attempt-2" },
     );
   });
 
@@ -310,7 +310,7 @@ describe("recoverReviewSessions", () => {
     expect(queueAddMock).toHaveBeenCalledWith(
       "review",
       expect.objectContaining({ reviewSessionId: "session-2", reviewKey: "repo-2:7:sha-2" }),
-      { jobId: "review:session-2:attempt:1" },
+      { jobId: "review-session-2-attempt-1" },
     );
   });
 });

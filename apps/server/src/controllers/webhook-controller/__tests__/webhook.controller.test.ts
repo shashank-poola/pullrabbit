@@ -206,7 +206,7 @@ describe("handleWebhook", () => {
     expect(reviewQueueAddMock).toHaveBeenCalledWith(
       "review",
       expect.objectContaining({ reviewSessionId: "session-1" }),
-      { jobId: "review:session-1:attempt:1" },
+      { jobId: "review-session-1-attempt-1" },
     );
     expect(reviewSessionUpdateMock).toHaveBeenCalledWith({
       where: { id: "session-1" },
@@ -328,7 +328,7 @@ describe("handleWebhook", () => {
       where: {
         id: "session-1",
         status: "QUEUED",
-        jobId: "review:session-1:attempt:1",
+        jobId: "review-session-1-attempt-1",
       },
       data: {
         status: "RETRYING",
@@ -357,7 +357,7 @@ describe("handleWebhook", () => {
       status: "QUEUED",
       attemptCount: 1,
       reviewKey: "repo-1:17:head-sha",
-      jobId: "review:session-1:attempt:1",
+      jobId: "review-session-1-attempt-1",
     });
 
     const deps = {

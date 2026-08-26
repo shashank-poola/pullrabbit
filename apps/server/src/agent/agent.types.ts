@@ -17,7 +17,7 @@ export type AgentResult = {
     agentName: string;
     comments: AgentComment[];
     durationMs: number;
-    provider: "openrouter" | "groq";
+    provider: "groq" | "gemini";
     error?: string;
 };
 

@@ -13,7 +13,7 @@ export type ReviewJobData = {
 };
 
 export const buildReviewJobId = (reviewSessionId: string, attempt: number) =>
-    `review:${reviewSessionId}:attempt:${attempt}`;
+    `review-${reviewSessionId}-attempt-${attempt}`;
 
 export const MAX_REVIEW_ATTEMPTS = 10;
 

@@ -103,4 +103,38 @@ describe("buildReviewComment", () => {
     expect(output).toContain("The remaining findings are non-blocking suggestions.");
     expect(output).not.toContain("The PR is not yet safe to merge");
   });
+
+  test("escapes untrusted Markdown in the title, summary, and findings", () => {
+    const output = buildReviewComment(
+      {
+        ...state,
+        prTitle: "[Approve this](https://evil.example)\n## fake heading",
+      },
+      [{
+        filePath: "apps/server/src/[unsafe].ts",
+        line: 12,
+        body: "[Ignore this](https://evil.example)\n# fake heading",
+        severity: "HIGH",
+        category: "SECURITY",
+        blocking: true,
+      }],
+      1_000,
+      {
+        overview: "Review [this link](https://evil.example) and **ignore** the findings.",
+        bullets: ["# injected heading", "Use `unsafe` input."],
+        mergeAssessment: "The PR is not yet safe to merge.",
+        mergeReason: "See [this link](https://evil.example) for details.",
+      },
+    );
+
+    expect(output).toContain("\\[Approve this\\]\\(https\\://evil.example\\) \\#\\# fake heading");
+    expect(output).toContain("Review \\[this link\\]\\(https\\://evil.example\\) and \\*\\*ignore\\*\\* the findings.");
+    expect(output).toContain("\\# injected heading");
+    expect(output).toContain("- `apps/server/src/[unsafe].ts:12` · **blocking** - \\[Ignore this\\]\\(https\\://evil.example\\) \\# fake heading.");
+    expect(output).toContain("See \\[this link\\]\\(https\\://evil.example\\) for details.");
+    expect(output).not.toContain("[Approve this](https://evil.example)");
+    expect(output).not.toContain("https://evil.example");
+    expect(output).not.toContain("\n## fake heading");
+    expect(output).not.toContain("\n# fake heading");
+  });
 });

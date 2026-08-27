@@ -45,11 +45,16 @@ const endWithPeriod = (text: string) => {
   if (!trimmed) return trimmed;
   return /[.!?…]$/.test(trimmed) ? trimmed : `${trimmed}.`;
 };
+const sanitizeMarkdownText = (text: string, max: number) => {
+  const normalized = text.trim().replace(/\s+/g, " ").replace(/[—–]/g, "-");
+  const escaped = normalized.replace(/[\\`*_{}\[\]()<>#|]/g, "\\$&");
+  return clip(escaped.replace(/https?:\/\//gi, (scheme) => scheme.replace(":", "\\:")), max);
+};
 const sanitizeInlineCode = (text: string, max: number) =>
   clip(text.trim().replace(/\s+/g, " ").replace(/`/g, "'").replace(/[—–]/g, "-"), max);
 const prTitleTag = (title: string | null): string => {
   if (!title?.trim()) return "";
-  return ` - ${clip(title.trim().replace(/[—–]/g, "-"), 140)}`;
+  return ` - ${sanitizeMarkdownText(title, 140)}`;
 };
 
 const buildSummaryLine = (fileCount: number, comments: AgentComment[]): string => {
@@ -63,14 +68,14 @@ const buildSummaryLine = (fileCount: number, comments: AgentComment[]): string =
 const buildSectionIntro = (singular: string, items: AgentComment[]): string => {
   const blocking = countBlocking(items);
   const blockingNote = blocking > 0 ? `, **${blocking} blocking**` : "";
-  const preview = endWithPeriod(clip(firstSentence(items[0]?.body ?? ""), 90));
+  const preview = endWithPeriod(sanitizeMarkdownText(firstSentence(items[0]?.body ?? ""), 90));
   return `Found **${plural(items.length, singular)}**${blockingNote}. ${preview}`;
 };
 
 const renderItem = (comment: AgentComment): string[] => {
   const blockingBadge = comment.blocking ? " · **blocking**" : "";
-  const body = endWithPeriod(clip(firstSentence(comment.body), 100));
-  const lines = [`- \`${comment.filePath}:${comment.line}\`${blockingBadge} - ${body}`];
+  const body = endWithPeriod(sanitizeMarkdownText(firstSentence(comment.body), 100));
+  const lines = [`- \`${sanitizeInlineCode(comment.filePath, 220)}:${comment.line}\`${blockingBadge} - ${body}`];
 
   if (comment.currentCode) {
     lines.push(`  - **Current code:** \`${sanitizeInlineCode(comment.currentCode, 200)}\``);
@@ -155,9 +160,9 @@ export const buildReviewComment = (
   const lines: string[] = [
     `## OpenMerge Summary${prTitleTag(state.prTitle)}`,
     "",
-    endWithPeriod(clip(summary.overview, 240)),
+    endWithPeriod(sanitizeMarkdownText(summary.overview, 240)),
     "",
-    ...summary.bullets.slice(0, 4).map((bullet) => `- ${endWithPeriod(clip(bullet, 180))}`),
+    ...summary.bullets.slice(0, 4).map((bullet) => `- ${endWithPeriod(sanitizeMarkdownText(bullet, 180))}`),
     "",
   ];
 
@@ -174,14 +179,14 @@ export const buildReviewComment = (
       ? `The PR is not yet safe to merge because ${plural(blockingCount, "blocking issue")} ${blockingCount === 1 ? "requires" : "require"} attention.`
       : "The PR has no blocking issues; the remaining suggestions are non-blocking.";
     const mergeReason = blockingCount > 0
-      ? endWithPeriod(clip(summary.mergeReason, 240))
+      ? endWithPeriod(sanitizeMarkdownText(summary.mergeReason, 240))
       : "The remaining findings are non-blocking suggestions.";
     lines.push(
       mergeAssessment,
       mergeReason,
       "",
       ...(filesNeedingAttention.length > 0
-        ? [`**Files Needing Attention:** ${filesNeedingAttention.map((file) => `\`${file}\``).join(", ")}`, ""]
+        ? [`**Files Needing Attention:** ${filesNeedingAttention.map((file) => `\`${sanitizeInlineCode(file, 220)}\``).join(", ")}`, ""]
         : []),
       buildSummaryLine(state.changedFiles.length, comments),
       "",

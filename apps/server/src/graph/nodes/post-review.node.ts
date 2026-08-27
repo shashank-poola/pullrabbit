@@ -6,6 +6,7 @@ import type { PRReviewStateType } from "../review.state";
 import { cleanupRepo } from "../context/clone-repo";
 import { buildReviewComment } from "./post-review.formatter";
 import { buildReviewCommentKey } from "../../utils/review-comment.utils";
+import { generateReviewSummary } from "../../agent/review-summary";
 
 const createInstallationOctokit = (githubInstallationId: string) =>
   new Octokit({
@@ -70,7 +71,13 @@ export const postReview = async (state: PRReviewStateType): Promise<Partial<PRRe
     const reviewMarker = `<!-- openmerge-review:${state.reviewSessionId} -->`;
     // Continue recognizing comments created before the brand migration.
     const legacyReviewMarker = `<!-- ${["pull", "rabbit"].join("")}-review:${state.reviewSessionId} -->`;
-    const body = `${buildReviewComment(state, comments, totalDurationMs)}\n\n${reviewMarker}`;
+    const summary = await generateReviewSummary({
+      prTitle: state.prTitle ?? `PR #${state.prNumber}`,
+      changedFiles: state.changedFiles,
+      diff: state.diff ?? "",
+      comments,
+    });
+    const body = `${buildReviewComment(state, comments, totalDurationMs, summary)}\n\n${reviewMarker}`;
 
     try {
       let updatedPersistedComment = false;

@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Mono } from "next/font/google";
 import { GeistSans } from "geist/font/sans";
-import { GeistPixelSquare } from "geist/font/pixel";
 import "@fontsource-variable/google-sans";
+import "@fontsource/poppins/400.css";
+import "@fontsource/poppins/500.css";
+import "@fontsource/poppins/600.css";
+import "@fontsource/poppins/700.css";
 import "./globals.css";
 import Providers from "@/components/Providers";
 import { cn } from "@/lib/utils";
@@ -31,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn(ibmPlexMono.variable, GeistSans.variable, GeistPixelSquare.variable)}>
+    <html lang="en" className={cn(ibmPlexMono.variable, GeistSans.variable)}>
       <body>
         <Providers>{children}</Providers>
       </body>

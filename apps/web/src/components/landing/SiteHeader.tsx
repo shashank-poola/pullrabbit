@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowUpRight01Icon } from "@hugeicons/core-free-icons";
 import { OpenMergeMark } from "./brand/OpenMergeMark";
 
 const navItems = [
@@ -44,7 +46,7 @@ export function SiteHeader() {
             className="group inline-flex items-center gap-2 rounded-full bg-[#171717] px-5 py-2.5 text-[13px] font-semibold text-white transition-transform hover:-translate-y-0.5"
           >
             Install app
-            <span className="text-[15px] transition-transform group-hover:translate-x-0.5">↗</span>
+            <HugeiconsIcon icon={ArrowUpRight01Icon} size={15} strokeWidth={1.8} className="transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
           </a>
         </nav>
 

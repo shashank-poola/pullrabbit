@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowUpRight01Icon, CheckmarkCircle02Icon } from "@hugeicons/core-free-icons";
 
 function ReviewCard({
   tone,
@@ -66,7 +68,7 @@ export function HeroSection() {
           className="group inline-flex h-12 items-center justify-center gap-3 rounded-full bg-[#171717] px-6 text-[14px] font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-[#2a2a2a]"
         >
           Install on GitHub
-          <span className="transition-transform group-hover:translate-x-0.5">↗</span>
+          <HugeiconsIcon icon={ArrowUpRight01Icon} size={16} strokeWidth={1.8} className="transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
         </a>
         <Link
           href="#how-it-works"
@@ -94,7 +96,7 @@ export function HeroSection() {
             <div className="mt-3 rounded-xl border border-[#f1e4cf] bg-[#fffaf1] p-3 text-[12px] leading-5 text-[#8a6b47]">“This callback can be reached before the workflow is verified.”</div>
           </ReviewCard>
           <ReviewCard tone="green" eyebrow="Step 03" title="Ready to merge">
-            <MiniRow color="#36a653">No blocking issues</MiniRow>
+            <MiniRow color="#36a653"><span className="inline-flex items-center gap-1.5"><HugeiconsIcon icon={CheckmarkCircle02Icon} size={14} strokeWidth={1.8} aria-hidden="true" />No blocking issues</span></MiniRow>
             <MiniRow color="#36a653">Summary posted to the PR</MiniRow>
             <MiniRow color="#36a653">Review history saved</MiniRow>
             <div className="mt-3 inline-flex rounded-full bg-[#dff4df] px-3 py-1.5 text-[12px] font-semibold text-[#278040]">Looks good to merge</div>

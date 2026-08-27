@@ -11,12 +11,14 @@ export default function LandingPage() {
   return (
     <main className="min-h-screen overflow-hidden bg-white text-[#171717]">
       <SiteHeader />
-      <HeroSection />
-      <FeaturesGrid />
-      <FeaturesSection />
-      <CompetitorsSection />
-      <FAQSection />
-      <WaitlistSection />
+      <div className="mx-auto max-w-[1000px] border-x border-[#e9e9e9]">
+        <HeroSection />
+        <FeaturesGrid />
+        <FeaturesSection />
+        <CompetitorsSection />
+        <FAQSection />
+        <WaitlistSection />
+      </div>
       <LandingFooter />
     </main>
   );

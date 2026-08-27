@@ -7,7 +7,7 @@ import { useState } from "react";
 const faqs = [
   ["What is OpenMerge?", "OpenMerge is an open source GitHub App that reviews pull requests with specialized AI agents and posts useful context directly on the changed lines."],
   ["How does a review start?", "Install the app, select your repositories, and open a pull request. OpenMerge listens for the GitHub event and starts the review automatically."],
-  ["Which providers can I use?", "OpenMerge is designed for your provider and your key. Gemini, Groq, and OpenAI-compatible endpoints can be configured as your setup evolves."],
+  ["Which providers can I use?", "OpenMerge is designed for your provider and your key. Gemini, Claude, ChatGPT, Grok, Z.ai, and custom OpenAI-compatible endpoints can be configured for your reviews."],
   ["Does OpenMerge change my code?", "No. It reads the pull request, writes review feedback, and leaves the decision and the code changes with your team."],
   ["Where are review comments posted?", "The summary appears in the pull request conversation and findings are posted inline on the relevant changed lines."],
   ["Is OpenMerge open source?", "Yes. The project is open source on GitHub, so you can inspect the workflow and adapt it to your team."],

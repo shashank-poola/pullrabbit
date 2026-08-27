@@ -5,7 +5,7 @@ import { FeaturesSection } from "@/components/landing/FeaturesSection";
 import { ReviewShowcase } from "@/components/landing/ReviewShowcase";
 import { CompetitorsSection } from "@/components/landing/CompetitorsSection";
 import { FAQSection } from "@/components/landing/FAQSection";
-import { WaitlistSection } from "@/components/landing/WaitlistSection";
+import { InstallCtaSection } from "@/components/landing/InstallCtaSection";
 import { LandingFooter } from "@/components/landing/LandingFooter";
 
 export default function LandingPage() {
@@ -19,7 +19,7 @@ export default function LandingPage() {
         <ReviewShowcase />
         <CompetitorsSection />
         <FAQSection />
-        <WaitlistSection />
+        <InstallCtaSection />
         <LandingFooter />
       </div>
     </main>

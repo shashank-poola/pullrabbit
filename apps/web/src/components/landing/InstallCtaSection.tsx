@@ -1,7 +1,7 @@
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowUpRight01Icon } from "@hugeicons/core-free-icons";
 
-export function WaitlistSection() {
+export function InstallCtaSection() {
   return (
     <section className="mx-auto max-w-[1180px] px-6 py-24 lg:px-10 lg:py-32">
       <div className="relative overflow-hidden rounded-[24px] border border-[#d8d8d4] bg-[#087fc9] px-7 py-16 text-center text-white shadow-[0_20px_50px_rgba(8,127,201,0.16)] sm:px-12 sm:py-20">

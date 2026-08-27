@@ -1,49 +1,45 @@
 "use client";
 
+import { ArrowDown01Icon, ArrowUpRight01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { useState } from "react";
 
 const faqs = [
-  { question: "What is OpenMerge?", answer: "OpenMerge is an open source AI-powered GitHub App that runs parallel review agents on every pull request and posts inline comments on security, performance, and code quality issues." },
-  { question: "How do I install OpenMerge?", answer: "Install the CLI via npm, bun, or brew — or install the GitHub App directly from GitHub Marketplace. Setup takes under 30 seconds." },
-  { question: "Does OpenMerge need repository access?", answer: "Yes — only for the repositories you select during setup. You control which repos OpenMerge can access at all times." },
-  { question: "Which AI models does OpenMerge support?", answer: "OpenMerge works with Claude, GPT-4o, Gemini, and any other LLM provider. Configure your preferred model in settings." },
-  { question: "How long does a PR review take?", answer: "Most reviews complete in under 60 seconds. Security, performance, and code quality agents run in parallel to keep things fast." },
-  { question: "How much does OpenMerge cost?", answer: "OpenMerge is free for open source repositories. Paid plans are available for private repositories and teams." },
-  { question: "What about data and privacy?", answer: "Only your PR diff and relevant code context is sent to the AI model you configure. No data is stored permanently beyond your review session." },
-  { question: "Is OpenMerge open source?", answer: "Yes. OpenMerge is fully open source on GitHub under the MIT license." },
+  ["What is OpenMerge?", "OpenMerge is an open source GitHub App that reviews pull requests with specialized AI agents and posts useful context directly on the changed lines."],
+  ["How does a review start?", "Install the app, select your repositories, and open a pull request. OpenMerge listens for the GitHub event and starts the review automatically."],
+  ["Which providers can I use?", "OpenMerge is designed for your provider and your key. Gemini, Claude, ChatGPT, Grok, Z.ai, and custom OpenAI-compatible endpoints can be configured for your reviews."],
+  ["Does OpenMerge change my code?", "No. It reads the pull request, writes review feedback, and leaves the decision and the code changes with your team."],
+  ["Where are review comments posted?", "The summary appears in the pull request conversation and findings are posted inline on the relevant changed lines."],
+  ["Is OpenMerge open source?", "Yes. The project is open source on GitHub, so you can inspect the workflow and adapt it to your team."],
 ];
 
 export function FAQSection() {
-  const [open, setOpen] = useState<number | null>(null);
+  const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section className="border-t border-white/8 px-10 py-24">
-      <h2 className="mb-12 text-[18px] font-bold text-white">FAQ</h2>
-      <div className="max-w-[640px] divide-y divide-white/8">
-        {faqs.map((faq, i) => (
-          <div key={faq.question}>
-            <button
-              onClick={() => setOpen(open === i ? null : i)}
-              className="flex w-full items-center justify-between py-5 text-left text-[14px]
-                text-white transition-colors duration-150 hover:text-white/70"
-            >
-              <span>{faq.question}</span>
-              <span
-                className={`ml-4 shrink-0 text-[18px] leading-none text-[#444]
-                  transition-transform duration-200 ${open === i ? "rotate-45" : "rotate-0"}`}
-              >
-                +
-              </span>
-            </button>
-            <div
-              className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                open === i ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
-              }`}
-            >
-              <p className="pb-5 text-[13px] leading-relaxed text-[#777]">{faq.answer}</p>
+    <section id="faq" className="scroll-mt-20 border-t border-[#eeeeee] bg-[#fbfbfb]">
+      <div className="mx-auto grid max-w-[1180px] gap-12 px-6 py-24 lg:grid-cols-[0.75fr_1.25fr] lg:px-10 lg:py-32">
+        <div>
+          <p className="mb-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-[#737373]">FAQ</p>
+          <h2 className="font-pixel max-w-[420px] text-4xl leading-[1.08] tracking-[-0.04em] text-[#171717] sm:text-5xl">Everything you are wondering.</h2>
+          <p className="mt-6 max-w-[330px] text-[15px] leading-7 text-[#686868]">
+            Still curious? <a href="https://github.com/shashank-poola/openmerge/issues" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 font-medium text-[#2e6cf6] underline decoration-[#b9d0ff] underline-offset-4">Ask on GitHub <HugeiconsIcon icon={ArrowUpRight01Icon} size={14} strokeWidth={1.8} aria-hidden="true" /></a>.
+          </p>
+        </div>
+
+        <div className="space-y-2">
+          {faqs.map(([question, answer], index) => (
+            <div key={question} className="overflow-hidden rounded-2xl border border-[#e5e5e5] bg-white">
+              <button type="button" aria-expanded={open === index} onClick={() => setOpen(open === index ? null : index)} className="flex w-full items-center justify-between gap-4 px-5 py-5 text-left text-[15px] font-medium text-[#202020] sm:px-6">
+                <span>{question}</span>
+                <span className={`grid size-6 shrink-0 place-items-center rounded-full border border-[#d9d9d9] text-[#898989] transition-transform duration-200 ${open === index ? "rotate-180" : "rotate-0"}`}>
+                  <HugeiconsIcon icon={ArrowDown01Icon} size={15} strokeWidth={1.8} aria-hidden="true" />
+                </span>
+              </button>
+              {open === index && <p className="border-t border-[#eeeeee] bg-[#fafafa] px-5 pb-5 pt-4 text-[14px] leading-6 text-[#686868] sm:px-6">{answer}</p>}
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );

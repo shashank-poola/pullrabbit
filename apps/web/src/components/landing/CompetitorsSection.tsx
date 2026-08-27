@@ -1,67 +1,35 @@
-const competitors = [
-  {
-    name: "CodeRabbit",
-    points: [
-      "Runs a single sequential AI pass on each PR.",
-      "No parallel multi-agent architecture — one model, one pass.",
-      "OpenMerge runs three specialized agents simultaneously: security, performance, and code quality.",
-    ],
-  },
-  {
-    name: "Greptile",
-    points: [
-      "A codebase Q&A tool — answer questions about your code through chat.",
-      "Not designed for automated PR review workflows or inline comments.",
-      "OpenMerge automates the full review pipeline end-to-end without human prompting.",
-    ],
-  },
-  {
-    name: "Graphite",
-    points: [
-      "A PR workflow tool optimized for stacked diffs and fast review queues.",
-      "No AI-powered review agents — humans still do all the reviewing.",
-      "OpenMerge works alongside Graphite to bring automated AI review to every stack.",
-    ],
-  },
-  {
-    name: "Kilo",
-    points: [
-      "An AI coding assistant that helps engineers write new code.",
-      "Does not review pull requests or post inline diff comments.",
-      "OpenMerge handles the post-commit review stage — after the code is written.",
-    ],
-  },
+import Image from "next/image";
+import { Cancel01Icon, CheckmarkCircle02Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+
+const rows = [
+  ["Posts findings on changed lines", true, "Depends", false],
+  ["Specialized security, performance, and quality passes", true, true, "Depends"],
+  ["Bring your own model key", true, "Depends", "Not applicable"],
+  ["Open source workflow", true, "Depends", "Not applicable"],
+  ["A concise review summary in the pull request", true, true, false],
 ];
+
+function Cell({ value }: { value: boolean | string }) {
+  if (value === true) return <HugeiconsIcon icon={CheckmarkCircle02Icon} size={17} strokeWidth={1.8} className="mx-auto text-[#159447]" aria-label="Yes" />;
+  if (value === false) return <HugeiconsIcon icon={Cancel01Icon} size={16} strokeWidth={1.8} className="mx-auto text-[#d45b5b]" aria-label="No" />;
+  return <span className="text-[12px] text-[#777]">{value}</span>;
+}
 
 export function CompetitorsSection() {
   return (
-    <section id="competitors" className="border-t border-white/8 px-10 py-24">
-      <h2 className="mb-2 text-[18px] font-bold text-white">OpenMerge vs</h2>
-      <p className="mb-14 text-[13px] text-[#555]">
-        How OpenMerge compares to other tools in the developer workflow.
-      </p>
+    <section id="compare" className="scroll-mt-20 mx-auto max-w-[1180px] px-6 py-24 lg:px-10 lg:py-32">
+      <div className="mx-auto mb-12 max-w-[620px] text-center">
+        <p className="mb-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-[#737373]">Built for the way teams merge</p>
+        <h2 className="font-pixel text-4xl leading-[1.08] tracking-[-0.04em] text-[#171717] sm:text-5xl">Why OpenMerge?</h2>
+        <p className="mt-5 text-[16px] leading-7 text-[#656565]">A focused review layer that fits into the tools your team already uses.</p>
+      </div>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        {competitors.map((c) => (
-          <div
-            key={c.name}
-            className="group border border-white/8 px-7 py-6 transition-colors duration-200
-              hover:border-white/15 hover:bg-white/[0.02]"
-          >
-            <p className="mb-5 text-[12px] font-bold uppercase tracking-wider text-[#444]
-              transition-colors duration-150 group-hover:text-[#666]">
-              vs {c.name}
-            </p>
-            <ul className="space-y-3">
-              {c.points.map((point, i) => (
-                <li key={i} className="flex gap-3 text-[13px] leading-relaxed">
-                  <span className="shrink-0 select-none text-[#333]">—</span>
-                  <span className={i === 2 ? "text-white" : "text-[#666]"}>{point}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+      <div className="overflow-x-auto rounded-[22px] border border-[#e1e1de] bg-white shadow-[0_10px_35px_rgba(23,23,23,0.035)]">
+        <table className="w-full min-w-[680px] border-collapse text-left">
+          <thead><tr className="border-b border-[#e9e9e9] text-[13px] text-[#777]"><th className="px-6 py-5 font-medium">Native features</th><th className="bg-[#f7fbff] px-5 py-5 text-center font-semibold text-[#2e6cf6]"><span className="inline-flex items-center gap-2"><Image src="/companies/openmerge.png" alt="" width={22} height={22} className="size-[22px] rounded-md object-cover" />OpenMerge</span></th><th className="px-5 py-5 text-center font-medium">Other AI reviewers</th><th className="px-5 py-5 text-center font-medium">Manual review</th></tr></thead>
+          <tbody>{rows.map(([label, openMerge, other, manual]) => <tr key={label as string} className="border-b border-[#eeeeee] last:border-0"><th className="px-6 py-5 text-[13px] font-medium text-[#333]">{label}</th><td className="bg-[#f7fbff] px-5 py-5 text-center text-[18px]"><Cell value={openMerge} /></td><td className="px-5 py-5 text-center"><Cell value={other} /></td><td className="px-5 py-5 text-center"><Cell value={manual} /></td></tr>)}</tbody>
+        </table>
       </div>
     </section>
   );

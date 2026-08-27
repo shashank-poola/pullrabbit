@@ -13,8 +13,8 @@
     "test:integration": "bun test tests/integration apps/server/__tests__"
   },
   "devDependencies": {
-    "@workspace/eslint-config": "workspace:*",
-    "@workspace/typescript-config": "workspace:*",
+    "@workspace/eslint-config": "file:packages/config-eslint",
+    "@workspace/typescript-config": "file:packages/config-typescript",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "turbo": "^2.8.8",

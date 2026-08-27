@@ -2,8 +2,10 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import Link from "next/link";
+import { Alert02Icon, CheckmarkCircle02Icon, Loading03Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { INSTALLATIONS_CALLBACK_URL } from "@/routes/apiRoute";
+import { AuthFrame } from "@/components/auth/AuthFrame";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
@@ -60,43 +62,40 @@ export function SetupCallbackPage() {
   const viewState = hasInstallationId ? state : "no_id";
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#131010] font-mono">
-      <div className="w-full max-w-sm space-y-6 px-6 text-center">
+    <AuthFrame>
+      <div className="w-full max-w-[470px] rounded-[24px] border border-[#e4e4e0] bg-[#fbfbf9] p-7 text-center shadow-[0_18px_45px_rgba(23,23,23,0.07)] sm:p-10">
         {viewState === "loading" && (
           <>
-            <p className="text-[13px] text-[#555]">Activating OpenMerge on your repos…</p>
-            <div className="mx-auto h-px w-16 animate-pulse bg-white/20" />
+            <div className="mx-auto grid size-14 place-items-center rounded-2xl bg-[#fff1df] text-[#e57620]"><HugeiconsIcon icon={Loading03Icon} size={27} strokeWidth={1.7} className="animate-spin" aria-hidden="true" /></div>
+            <h1 className="mt-6 font-pixel text-3xl font-semibold tracking-[-0.04em]">Activating OpenMerge.</h1>
+            <p className="mt-3 text-[14px] leading-6 text-[#696965]">Connecting your selected repositories to the review pipeline.</p>
           </>
         )}
 
         {viewState === "success" && (
           <>
-            <p className="text-[13px] text-white">Bot activated.</p>
-            <p className="text-[12px] text-[#555]">
-              OpenMerge will now review every pull request automatically. Redirecting…
-            </p>
+            <div className="mx-auto grid size-14 place-items-center rounded-2xl bg-[#e8f7ed] text-[#198b4d]"><HugeiconsIcon icon={CheckmarkCircle02Icon} size={27} strokeWidth={1.7} aria-hidden="true" /></div>
+            <h1 className="mt-6 font-pixel text-3xl font-semibold tracking-[-0.04em]">You are connected.</h1>
+            <p className="mt-3 text-[14px] leading-6 text-[#696965]">OpenMerge is ready to review pull requests. Taking you home now.</p>
           </>
         )}
 
         {viewState === "error" && (
           <>
-            <p className="text-[13px] text-red-400">Activation failed.</p>
-            <p className="text-[12px] text-[#555]">{errorMsg}</p>
-            <Link href="/" className="inline-block text-[12px] text-[#444] transition-colors hover:text-white">
-              ← return home
-            </Link>
+            <div className="mx-auto grid size-14 place-items-center rounded-2xl bg-[#fff0f0] text-[#c44141]"><HugeiconsIcon icon={Alert02Icon} size={27} strokeWidth={1.7} aria-hidden="true" /></div>
+            <h1 className="mt-6 font-pixel text-3xl font-semibold tracking-[-0.04em]">Activation needs attention.</h1>
+            <p className="mt-3 text-[14px] leading-6 text-[#696965]">{errorMsg}</p>
           </>
         )}
 
         {viewState === "no_id" && (
           <>
-            <p className="text-[13px] text-[#555]">No installation ID found.</p>
-            <Link href="/" className="inline-block text-[12px] text-[#444] transition-colors hover:text-white">
-              ← return home
-            </Link>
+            <div className="mx-auto grid size-14 place-items-center rounded-2xl bg-[#f1f1ee] text-[#777]"><HugeiconsIcon icon={Alert02Icon} size={27} strokeWidth={1.7} aria-hidden="true" /></div>
+            <h1 className="mt-6 font-pixel text-3xl font-semibold tracking-[-0.04em]">Installation link incomplete.</h1>
+            <p className="mt-3 text-[14px] leading-6 text-[#696965]">Return to OpenMerge and start the GitHub connection again.</p>
           </>
         )}
       </div>
-    </div>
+    </AuthFrame>
   );
 }

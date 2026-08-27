@@ -281,19 +281,37 @@ export async function handlePullRequestEvent(
 
         try {
             const octokit = deps.createInstallationOctokit(installationId);
+            const loadingCommentBody = [
+                '## OpenMerge Review',
+                '',
+                '> ℹ️ **Review in progress**',
+                '>',
+                '> OpenMerge is reviewing the latest changes in this pull request.',
+                '>',
+                '> The final summary will update this comment, and any findings will be posted inline on the changed lines.',
+                '',
+                '<details>',
+                '<summary>Review details</summary>',
+                '',
+                `- Commit: \`${headSha.slice(0, 7)}\``,
+                `- Pull request: #${prNumber}`,
+                '',
+                '</details>',
+            ].join('\n');
+
             if (session.githubLoadingCommentId) {
                 await octokit.rest.issues.updateComment({
                     owner: repo.owner,
                     repo: repo.name,
                     comment_id: Number(session.githubLoadingCommentId),
-                    body: '**OpenMerge** is analyzing this pull request again. An automated review will be posted as inline comments once the analysis is complete.',
+                    body: loadingCommentBody,
                 });
             } else {
                 const { data: comment } = await octokit.rest.issues.createComment({
                     owner: repo.owner,
                     repo: repo.name,
                     issue_number: prNumber,
-                    body: '**OpenMerge** is analyzing this pull request again. An automated review will be posted as inline comments once the analysis is complete.',
+                    body: loadingCommentBody,
                 });
                 createdLoadingCommentId = BigInt(comment.id);
             }

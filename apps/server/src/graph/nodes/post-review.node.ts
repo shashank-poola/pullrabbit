@@ -6,6 +6,7 @@ import type { PRReviewStateType } from "../review.state";
 import { cleanupRepo } from "../context/clone-repo";
 import { buildReviewComment } from "./post-review.formatter";
 import { buildReviewCommentKey } from "../../utils/review-comment.utils";
+import { generateReviewSummary } from "../../agent/review-summary";
 
 const createInstallationOctokit = (githubInstallationId: string) =>
   new Octokit({
@@ -71,6 +72,7 @@ export const postReview = async (state: PRReviewStateType): Promise<Partial<PRRe
     // Continue recognizing comments created before the brand migration.
     const legacyReviewMarker = `<!-- ${["pull", "rabbit"].join("")}-review:${state.reviewSessionId} -->`;
     const body = `${buildReviewComment(state, comments, totalDurationMs)}\n\n${reviewMarker}`;
+    let reviewCommentId: number | null = loadingCommentId ? Number(loadingCommentId) : null;
 
     try {
       let updatedPersistedComment = false;
@@ -106,13 +108,15 @@ export const postReview = async (state: PRReviewStateType): Promise<Partial<PRRe
             comment_id: existingReviewComment.id,
             body,
           });
+          reviewCommentId = existingReviewComment.id;
         } else {
-          await octokit.rest.issues.createComment({
+          const { data: createdComment } = await octokit.rest.issues.createComment({
             owner: state.owner,
             repo: state.repoName,
             issue_number: state.prNumber,
             body,
           });
+          reviewCommentId = createdComment.id;
         }
       }
     } catch (error) {
@@ -135,6 +139,30 @@ export const postReview = async (state: PRReviewStateType): Promise<Partial<PRRe
         skipDuplicates: true,
       });
     }
+
+    // The summary is best effort and intentionally runs after the initial review is published.
+    void generateReviewSummary({
+      prTitle: state.prTitle ?? `PR #${state.prNumber}`,
+      changedFiles: state.changedFiles,
+      diff: state.diff ?? "",
+      comments,
+    }).then(async (summary) => {
+      if (!summary || reviewCommentId === null) return;
+
+      const summaryBody = `${buildReviewComment(state, comments, totalDurationMs, summary)}\n\n${reviewMarker}`;
+      try {
+        await octokit.rest.issues.updateComment({
+          owner: state.owner,
+          repo: state.repoName,
+          comment_id: reviewCommentId,
+          body: summaryBody,
+        });
+      } catch (error) {
+        console.warn("Generated review summary update failed:", error);
+      }
+    }).catch((error) => {
+      console.warn("Generated review summary failed:", error);
+    });
 
     return {};
   } catch (error) {

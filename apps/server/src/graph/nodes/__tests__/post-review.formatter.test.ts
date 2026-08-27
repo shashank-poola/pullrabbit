@@ -51,4 +51,56 @@ describe("buildReviewComment", () => {
     expect(output).toContain("Reviewed **1 file** · **1 issue** · **1 blocking**");
     expect(output).toContain("⛔ **Changes requested**");
   });
+
+  test("requests changes for a blocking medium-severity finding", () => {
+    const output = buildReviewComment(state, [{
+      filePath: "apps/server/src/llm/llm.provider.ts",
+      line: 12,
+      body: "This issue blocks the review from being merged.",
+      severity: "MEDIUM",
+      category: "BUG",
+      blocking: true,
+    }], 1_000);
+
+    expect(output).toContain("⛔ **Changes requested**");
+    expect(output).toContain("1 blocking issue requires attention");
+  });
+
+  test("keeps a non-blocking high-severity finding as a suggestion", () => {
+    const output = buildReviewComment(state, [{
+      filePath: "apps/server/src/llm/llm.provider.ts",
+      line: 12,
+      body: "This issue is worth reviewing but does not block the merge.",
+      severity: "HIGH",
+      category: "BUG",
+      blocking: false,
+    }], 1_000);
+
+    expect(output).toContain("⚠️ **Review complete**. Non-blocking suggestions noted.");
+    expect(output).not.toContain("⛔ **Changes requested**");
+    expect(output).toContain("The PR has no blocking issues; the remaining suggestions are non-blocking.");
+  });
+
+  test("uses non-blocking fallback guidance when all findings are non-blocking", () => {
+    const output = buildReviewComment(state, [{
+      filePath: "apps/server/src/llm/llm.provider.ts",
+      line: 12,
+      body: "This is a minor improvement suggestion.",
+      severity: "LOW",
+      category: "STYLE",
+      blocking: false,
+    }, {
+      filePath: "apps/server/src/llm/gemini.config.ts",
+      line: 8,
+      body: "This could be documented more clearly.",
+      severity: "MEDIUM",
+      category: "DOCUMENTATION",
+      blocking: false,
+    }], 1_000);
+
+    expect(output).toContain("This PR includes review suggestions that do not block merging.");
+    expect(output).toContain("The PR has no blocking issues; the remaining suggestions are non-blocking.");
+    expect(output).toContain("The remaining findings are non-blocking suggestions.");
+    expect(output).not.toContain("The PR is not yet safe to merge");
+  });
 });

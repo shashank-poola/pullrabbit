@@ -123,11 +123,9 @@ export const buildReviewComment = (
   durationMs: number,
   reviewSummary: ReviewSummary | null = null,
 ): string => {
-  const hasCriticalOrHigh = comments.some(
-    (comment) => comment.severity === "CRITICAL" || comment.severity === "HIGH",
-  );
+  const blockingCount = countBlocking(comments);
   const durationSec = (durationMs / 1000).toFixed(1);
-  const verdict = hasCriticalOrHigh
+  const verdict = blockingCount > 0
     ? "⛔ **Changes requested**. Blocking issues must be resolved before merging."
     : comments.length > 0
       ? "⚠️ **Review complete**. Non-blocking suggestions noted."
@@ -136,16 +134,22 @@ export const buildReviewComment = (
   const fallbackSummary: ReviewSummary = {
     overview: comments.length === 0
       ? `This PR updates ${state.prTitle?.trim() || "the repository"}.`
-      : "This PR introduces changes that require review before merging.",
+      : blockingCount > 0
+        ? "This PR introduces changes that require review before merging."
+        : "This PR includes review suggestions that do not block merging.",
     bullets: comments.length === 0
       ? [`Updates ${plural(state.changedFiles.length, "changed file")}.`]
       : [`Introduces ${plural(comments.length, "review finding")}.`],
     mergeAssessment: comments.length === 0
       ? "No actionable issues were detected."
-      : "The PR is not yet safe to merge.",
+      : blockingCount > 0
+        ? "The PR is not yet safe to merge."
+        : "No blocking issues were detected.",
     mergeReason: comments.length === 0
       ? "No blocking issues were found in the changed code."
-      : "Blocking findings require attention before merging.",
+      : blockingCount > 0
+        ? "Blocking findings require attention before merging."
+        : "The remaining findings are non-blocking suggestions.",
   };
   const summary = reviewSummary ?? fallbackSummary;
   const lines: string[] = [
@@ -166,13 +170,15 @@ export const buildReviewComment = (
       "",
     );
   } else {
-    const blockingCount = countBlocking(comments);
     const mergeAssessment = blockingCount > 0
       ? `The PR is not yet safe to merge because ${plural(blockingCount, "blocking issue")} ${blockingCount === 1 ? "requires" : "require"} attention.`
       : "The PR has no blocking issues; the remaining suggestions are non-blocking.";
+    const mergeReason = blockingCount > 0
+      ? endWithPeriod(clip(summary.mergeReason, 240))
+      : "The remaining findings are non-blocking suggestions.";
     lines.push(
       mergeAssessment,
-      endWithPeriod(clip(summary.mergeReason, 240)),
+      mergeReason,
       "",
       ...(filesNeedingAttention.length > 0
         ? [`**Files Needing Attention:** ${filesNeedingAttention.map((file) => `\`${file}\``).join(", ")}`, ""]

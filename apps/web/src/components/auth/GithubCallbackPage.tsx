@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { Alert02Icon, Loading03Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { GITHUB_EXCHANGE_URL } from "@/routes/apiRoute";
+import { AuthFrame } from "./AuthFrame";
 
 const GITHUB_INSTALL_URL =
   "https://github.com/apps/openmerge-app/installations/select_target";
@@ -43,23 +45,26 @@ export function GithubCallbackPage() {
     const message = error || missingCodeError;
 
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#131010] font-mono">
-        <div className="space-y-4 text-center">
-          <p className="text-[13px] text-red-400">{message}</p>
-          <Link href="/" className="inline-block text-[12px] text-[#444] transition-colors hover:text-white">
-            ← return home
-          </Link>
+      <AuthFrame>
+        <div className="w-full max-w-[430px] rounded-[24px] border border-[#e4e4e0] bg-[#fbfbf9] p-7 text-center shadow-[0_18px_45px_rgba(23,23,23,0.07)] sm:p-10">
+          <div className="mx-auto grid size-12 place-items-center rounded-2xl bg-[#fff0f0] text-[#c44141]"><HugeiconsIcon icon={Alert02Icon} size={24} strokeWidth={1.7} aria-hidden="true" /></div>
+          <h1 className="mt-6 font-pixel text-3xl font-semibold tracking-[-0.04em]">Sign-in needs attention.</h1>
+          <p className="mt-3 text-[14px] leading-6 text-[#696965]">{message}</p>
+          <a href="https://github.com/apps/openmerge-app/installations/select_target" className="mt-7 inline-flex h-11 items-center justify-center rounded-full bg-[#171717] px-5 text-[13px] font-semibold text-white transition-transform hover:-translate-y-0.5">Try again on GitHub</a>
         </div>
-      </div>
+      </AuthFrame>
     );
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#131010] font-mono">
-      <div className="space-y-3 text-center">
-        <p className="text-[13px] text-[#555]">Signing in…</p>
-        <div className="mx-auto h-px w-12 animate-pulse bg-white/20" />
+    <AuthFrame>
+      <div className="w-full max-w-[470px] rounded-[24px] border border-[#e4e4e0] bg-[#fbfbf9] p-7 text-center shadow-[0_18px_45px_rgba(23,23,23,0.07)] sm:p-10">
+        <div className="mx-auto grid size-14 place-items-center rounded-2xl bg-[#e8f0ff] text-[#2764d8]"><HugeiconsIcon icon={Loading03Icon} size={27} strokeWidth={1.7} className="animate-spin" aria-hidden="true" /></div>
+        <h1 className="mt-6 font-pixel text-3xl font-semibold tracking-[-0.04em]">Connecting your GitHub.</h1>
+        <p className="mt-3 text-[14px] leading-6 text-[#696965]">One moment while OpenMerge securely completes the handoff.</p>
+        <div className="mt-8 flex items-center justify-center gap-2 text-[11px] font-medium text-[#7a7a75]"><span className="grid size-5 place-items-center rounded-full bg-[#e8f0ff] text-[#2764d8]">1</span><span className="h-px w-10 bg-[#dcdcd8]" /><span className="grid size-5 place-items-center rounded-full border border-[#dcdcd8] text-[#969691]">2</span></div>
+        <p className="mt-3 text-[11px] uppercase tracking-[0.16em] text-[#969691]">Secure sign-in</p>
       </div>
-    </div>
+    </AuthFrame>
   );
 }

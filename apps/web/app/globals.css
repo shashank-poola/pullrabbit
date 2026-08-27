@@ -5,9 +5,10 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --font-mono: var(--font-ibm-plex-mono), 'Consolas', 'Menlo', 'Courier New', monospace;
+  --font-mono: 'Consolas', 'Menlo', 'Courier New', monospace;
   --font-sans: 'Google Sans Variable', var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-pixel: 'Poppins', var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-pixel: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-bricolage: var(--font-bricolage-grotesque), var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
   --color-pr-paper: #fbfbfb;
   --color-pr-ink: #2c2826;
@@ -210,7 +211,11 @@ body {
 }
 
 .font-pixel {
-  font-family: 'Poppins', var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.font-bricolage {
+  font-family: var(--font-bricolage-grotesque), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 html {

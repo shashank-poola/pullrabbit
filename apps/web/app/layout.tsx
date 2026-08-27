@@ -1,19 +1,14 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Mono } from "next/font/google";
+import { Bricolage_Grotesque } from "next/font/google";
 import { GeistSans } from "geist/font/sans";
 import "@fontsource-variable/google-sans";
-import "@fontsource/poppins/400.css";
-import "@fontsource/poppins/500.css";
-import "@fontsource/poppins/600.css";
-import "@fontsource/poppins/700.css";
 import "./globals.css";
 import Providers from "@/components/Providers";
-import { cn } from "@/lib/utils";
 
-const ibmPlexMono = IBM_Plex_Mono({
+const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
-  variable: "--font-ibm-plex-mono",
+  variable: "--font-bricolage-grotesque",
   display: "swap",
 });
 
@@ -22,9 +17,9 @@ export const metadata: Metadata = {
   description:
     "Parallel AI code review agents that inspect pull requests, flag issues, and prepare merge-ready summaries.",
   icons: {
-    icon: "/openmerge/logo.png",
-    shortcut: "/openmerge/logo.png",
-    apple: "/openmerge/logo.png",
+    icon: "/companies/openmerge.png",
+    shortcut: "/companies/openmerge.png",
+    apple: "/companies/openmerge.png",
   },
 };
 
@@ -34,7 +29,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn(ibmPlexMono.variable, GeistSans.variable)}>
+    <html lang="en" className={`${GeistSans.variable} ${bricolage.variable}`}>
       <body>
         <Providers>{children}</Providers>
       </body>

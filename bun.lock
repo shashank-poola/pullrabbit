@@ -63,7 +63,6 @@
       "dependencies": {
         "@base-ui/react": "^1.5.0",
         "@fontsource-variable/google-sans": "^5.3.1",
-        "@fontsource/poppins": "^5.3.0",
         "@hugeicons/core-free-icons": "^4.3.0",
         "@hugeicons/react": "^1.1.10",
         "class-variance-authority": "^0.7.1",
@@ -369,8 +368,6 @@
     "@floating-ui/utils": ["@floating-ui/utils@0.2.11", "", {}, "sha512-RiB/yIh78pcIxl6lLMG0CgBXAZ2Y0eVHqMPYugu+9U0AeT6YBeiJpf7lbdJNIugFP5SIjwNRgo4DhR1Qxi26Gg=="],
 
     "@fontsource-variable/google-sans": ["@fontsource-variable/google-sans@5.3.1", "", {}, "sha512-FLB6ZktdAtYWj49W6TtmqThHb33XL5g8l6T+oKNcvmNUXou4PPdIkstt1Z/UyD6K+g/CYjiHF+j+eRMNZxYKZg=="],
-
-    "@fontsource/poppins": ["@fontsource/poppins@5.3.0", "", {}, "sha512-cms1nM7U6SN8epIV1WMVOV8VsA645aSm3wHfzIQnkk188U341ThbJGSl2Sv54V29gnDbT2arMPfLzvVIIVCceQ=="],
 
     "@google/generative-ai": ["@google/generative-ai@0.24.1", "", {}, "sha512-MqO+MLfM6kjxcKoy0p1wRzG3b4ZZXtPI+z2IE26UogS2Cm/XHO+7gGRBh6gcJsOiIVoH93UwKvW4HdgiOZCy9Q=="],
 

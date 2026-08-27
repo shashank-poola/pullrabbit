@@ -1,60 +1,24 @@
+import Image from "next/image";
 import Link from "next/link";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowUpRight01Icon } from "@hugeicons/core-free-icons";
-import { OpenMergeMark } from "./brand/OpenMergeMark";
-
-const navItems = [
-  { label: "Product", href: "#product" },
-  { label: "BYOK", href: "#byok" },
-  { label: "Compare", href: "#compare" },
-  { label: "FAQ", href: "#faq" },
-];
 
 export function SiteHeader() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
   return (
     <header className="border-b border-[#ecece8] bg-white/90 backdrop-blur-xl">
-      <div className="mx-auto flex h-[76px] max-w-[1180px] items-center justify-between px-6 sm:px-8 lg:px-10">
+      <div className="mx-auto flex h-[76px] items-center justify-between px-5 sm:px-8">
         <Link href="/" className="flex items-center gap-3" aria-label="OpenMerge home">
-          <span className="grid size-9 place-items-center rounded-[11px] bg-[#171717]">
-            <OpenMergeMark color="light" />
-          </span>
+          <Image src="/companies/openmerge.png" alt="" width={36} height={36} className="size-9 rounded-[11px] object-cover" priority />
           <span className="text-[17px] font-semibold tracking-[-0.04em] text-[#171717]">OpenMerge</span>
         </Link>
-
-        <nav className="hidden items-center gap-7 md:flex" aria-label="Primary navigation">
-          {navItems.map((item) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              className="text-[14px] font-medium text-[#686864] transition-colors hover:text-[#171717]"
-            >
-              {item.label}
-            </Link>
-          ))}
-          <a
-            href="https://github.com/shashank-poola/openmerge"
-            target="_blank"
-            rel="noreferrer"
-            className="text-[14px] font-medium text-[#686864] transition-colors hover:text-[#171717]"
-          >
-            GitHub
-          </a>
-          <a
-            href={`${apiUrl}/api/v1/auth/github`}
-            className="group inline-flex items-center gap-2 rounded-full bg-[#171717] px-5 py-2.5 text-[13px] font-semibold text-white transition-transform hover:-translate-y-0.5"
-          >
-            Install app
-            <HugeiconsIcon icon={ArrowUpRight01Icon} size={15} strokeWidth={1.8} className="transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
-          </a>
-        </nav>
-
         <a
           href={`${apiUrl}/api/v1/auth/github`}
-          className="rounded-full bg-[#171717] px-4 py-2 text-[13px] font-semibold text-white md:hidden"
+          className="group inline-flex items-center gap-2 rounded-full bg-[#171717] px-4 py-2.5 text-[13px] font-semibold text-white transition-transform hover:-translate-y-0.5 hover:bg-[#2a2a2a]"
         >
           Get started
+          <HugeiconsIcon icon={ArrowUpRight01Icon} size={15} strokeWidth={1.8} className="transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
         </a>
       </div>
     </header>

@@ -1,46 +1,19 @@
-import Image from "next/image";
 import Link from "next/link";
+import { OpenMergeMark } from "./brand/OpenMergeMark";
 
 const footerLinks = [
   { label: "GitHub", href: "https://github.com/shashank-poola/openmerge" },
   { label: "Docs", href: "/docs" },
-  { label: "OpenMerge", href: "/" },
   { label: "Install", href: "https://github.com/apps/openmerge-app/installations/select_target" },
-  { label: "X", href: "https://x.com/shashank-poola" },
 ];
 
 export function LandingFooter() {
   return (
-    <footer className="border-t border-white/8">
-      <div className="grid grid-cols-2 divide-x divide-white/8 border-b border-white/8 md:grid-cols-5">
-        {footerLinks.map((link) => (
-          <a
-            key={link.label}
-            href={link.href}
-            target={link.href.startsWith("http") ? "_blank" : undefined}
-            rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
-            className="flex items-center justify-center py-6 text-[13px] text-[#555]
-              transition-colors duration-150 hover:text-white"
-          >
-            {link.label}
-          </a>
-        ))}
-      </div>
-      <div className="flex flex-wrap items-center justify-between gap-4 px-10 py-5 text-[12px] text-[#444]">
-        <Link href="/" className="transition-opacity hover:opacity-70">
-          <Image
-            src="/openmerge/reclogo.png"
-            alt="OpenMerge"
-            width={160}
-            height={50}
-            className="h-12 w-auto opacity-50"
-          />
-        </Link>
-        <div className="flex gap-5">
-          <Link href="#" className="transition-colors duration-150 hover:text-[#888]">Brand</Link>
-          <Link href="/privacy" className="transition-colors duration-150 hover:text-[#888]">Privacy</Link>
-          <Link href="/terms" className="transition-colors duration-150 hover:text-[#888]">Terms</Link>
-        </div>
+    <footer className="border-t border-[#eeeeee] bg-white">
+      <div className="mx-auto flex max-w-[1180px] flex-col gap-7 px-6 py-10 sm:flex-row sm:items-center sm:justify-between lg:px-10">
+        <Link href="/" className="flex items-center gap-2.5 text-[15px] font-semibold tracking-[-0.02em] text-[#171717]"><span className="grid size-8 place-items-center rounded-[10px] bg-[#171717]"><OpenMergeMark color="light" /></span>OpenMerge</Link>
+        <nav className="flex flex-wrap gap-x-6 gap-y-3 text-[13px] text-[#696969]">{footerLinks.map((link) => <a key={link.label} href={link.href} target={link.href.startsWith("http") ? "_blank" : undefined} rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined} className="transition-colors hover:text-[#171717]">{link.label}</a>)}<Link href="/privacy" className="transition-colors hover:text-[#171717]">Privacy</Link><Link href="/terms" className="transition-colors hover:text-[#171717]">Terms</Link></nav>
+        <p className="text-[12px] text-[#969696]">Open source, built in public.</p>
       </div>
     </footer>
   );

@@ -1,43 +1,18 @@
-"use client";
-
-import { useState } from "react";
+import Link from "next/link";
 
 export function WaitlistSection() {
-  const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email.trim()) setSubmitted(true);
-  };
-
   return (
-    <section className="border-t border-white/8 px-10 py-24">
-      <h2 className="mb-2 text-[18px] font-bold text-white">
-        Be the first to know when we release new features
-      </h2>
-      <p className="mb-8 text-[14px] text-[#777]">Join the waitlist for early access.</p>
-
-      {submitted ? (
-        <p className="text-[14px] text-[#777]">You&apos;re on the list. We&apos;ll be in touch.</p>
-      ) : (
-        <form onSubmit={handleSubmit} className="flex max-w-[500px]">
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email address"
-            required
-            className="flex-1 border border-white/15 bg-transparent px-4 py-3 text-[13px] text-white placeholder-[#444] outline-none focus:border-white/30"
-          />
-          <button
-            type="submit"
-            className="border border-l-0 border-white/15 bg-white px-6 py-3 text-[13px] font-bold text-black transition-colors hover:bg-[#e8e8e8]"
-          >
-            Subscribe
-          </button>
-        </form>
-      )}
+    <section className="mx-auto max-w-[1180px] px-6 py-24 lg:px-10 lg:py-32">
+      <div className="relative overflow-hidden rounded-[28px] bg-[#171717] px-7 py-16 text-center text-white sm:px-12 sm:py-20">
+        <div className="pointer-events-none absolute -left-16 -top-24 size-64 rounded-full bg-[#2e6cf6]/35 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-32 -right-10 size-72 rounded-full bg-[#ff9b55]/25 blur-3xl" />
+        <div className="relative mx-auto max-w-[640px]">
+          <p className="mb-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-[#aebfe6]">Start with your next pull request</p>
+          <h2 className="font-pixel text-4xl leading-[1.08] tracking-[-0.04em] sm:text-5xl">Make review feel lighter.</h2>
+          <p className="mx-auto mt-5 max-w-[470px] text-[16px] leading-7 text-[#c5c5c5]">Install OpenMerge, connect GitHub, and give every change the context it deserves.</p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3"><a href="https://github.com/apps/openmerge-app/installations/select_target" target="_blank" rel="noopener noreferrer" className="rounded-full bg-white px-5 py-3 text-[13px] font-semibold text-[#171717] transition-transform hover:-translate-y-0.5">Install on GitHub <span aria-hidden="true">↗</span></a><Link href="/docs" className="rounded-full border border-white/25 px-5 py-3 text-[13px] font-semibold text-white transition-colors hover:bg-white/10">Read the docs</Link></div>
+        </div>
+      </div>
     </section>
   );
 }

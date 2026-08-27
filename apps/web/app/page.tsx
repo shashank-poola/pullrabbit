@@ -1,4 +1,3 @@
-import { PageShell } from "@/components/layout/PageShell";
 import { SiteHeader } from "@/components/landing/SiteHeader";
 import { HeroSection } from "@/components/landing/HeroSection";
 import { FeaturesGrid } from "@/components/landing/FeaturesGrid";
@@ -10,7 +9,7 @@ import { LandingFooter } from "@/components/landing/LandingFooter";
 
 export default function LandingPage() {
   return (
-    <PageShell>
+    <main className="min-h-screen overflow-hidden bg-white text-[#171717]">
       <SiteHeader />
       <HeroSection />
       <FeaturesGrid />
@@ -19,6 +18,6 @@ export default function LandingPage() {
       <FAQSection />
       <WaitlistSection />
       <LandingFooter />
-    </PageShell>
+    </main>
   );
 }

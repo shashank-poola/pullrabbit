@@ -6,7 +6,8 @@
 
 @theme {
   --font-mono: var(--font-ibm-plex-mono), 'Consolas', 'Menlo', 'Courier New', monospace;
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: 'Google Sans Variable', var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-pixel: var(--font-geist-pixel-square), 'Geist Pixel', var(--font-ibm-plex-mono), monospace;
 
   --color-pr-paper: #fbfbfb;
   --color-pr-ink: #2c2826;
@@ -97,9 +98,9 @@
 }
 
 body {
-  background: #fbfbfb;
+  background: #ffffff;
   color: #2c2826;
-  font-family: var(--font-mono);
+  font-family: 'Google Sans Variable', var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -122,7 +123,6 @@ body {
 
 @theme inline {
   --font-heading: var(--font-sans);
-  --font-sans: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -202,9 +202,17 @@ body {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-white text-[#2c2826];
   }
   html {
     @apply font-sans;
   }
+}
+
+.font-pixel {
+  font-family: var(--font-geist-pixel-square), 'Geist Pixel', var(--font-ibm-plex-mono), monospace;
+}
+
+html {
+  scroll-behavior: smooth;
 }

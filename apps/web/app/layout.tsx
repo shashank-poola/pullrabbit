@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Mono, Figtree } from "next/font/google";
+import { IBM_Plex_Mono } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
+import { GeistPixelSquare } from "geist/font/pixel";
+import "@fontsource-variable/google-sans";
 import "./globals.css";
 import Providers from "@/components/Providers";
 import { cn } from "@/lib/utils";
-
-const figtree = Figtree({subsets:['latin'],variable:'--font-sans'});
 
 const ibmPlexMono = IBM_Plex_Mono({
   subsets: ["latin"],
@@ -30,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn(ibmPlexMono.variable, figtree.variable)}>
+    <html lang="en" className={cn(ibmPlexMono.variable, GeistSans.variable, GeistPixelSquare.variable)}>
       <body>
         <Providers>{children}</Providers>
       </body>

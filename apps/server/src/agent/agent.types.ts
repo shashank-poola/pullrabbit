@@ -17,7 +17,7 @@ export type AgentResult = {
     agentName: string;
     comments: AgentComment[];
     durationMs: number;
-    provider: "groq" | "gemini";
+    provider: "bai" | "groq" | "gemini";
     error?: string;
 };
 

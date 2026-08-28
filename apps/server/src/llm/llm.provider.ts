@@ -28,21 +28,21 @@ export const invokeLLM = async (
     messages: BaseLanguageModelInput,
     task: Task = "codeReview"
 ): Promise<{ content: string; provider: "bai" | "groq" | "gemini" }> => {
-    if (hasBai()) {
-        try {
-            const response = await baiForTask(task).invoke(messages);
-            return { content: responseContentToString(response.content), provider: "bai" };
-        } catch (err) {
-            console.warn(`BAI failed for [${task}], falling back to configured providers:`, (err as Error).message);
-        }
-    }
-
     if (hasGemini()) {
         try {
             const response = await geminiForTask(task).invoke(messages);
             return { content: responseContentToString(response.content), provider: "gemini" };
         } catch (err) {
-            console.warn(`Gemini failed for [${task}], falling back to Groq:`, (err as Error).message);
+            console.warn(`Gemini failed for [${task}], falling back to BAI/Groq:`, (err as Error).message);
+        }
+    }
+
+    if (hasBai()) {
+        try {
+            const response = await baiForTask(task).invoke(messages);
+            return { content: responseContentToString(response.content), provider: "bai" };
+        } catch (err) {
+            console.warn(`BAI failed for [${task}], falling back to Groq:`, (err as Error).message);
         }
     }
 
@@ -56,6 +56,6 @@ export const invokeLLM = async (
 };
 
 export const getLLM = (task: Task = "codeReview") => ({
-    primary: hasBai() ? baiForTask(task) : hasGemini() ? geminiForTask(task) : groqForTask(task),
-    fallback: hasBai() ? (hasGemini() ? geminiForTask(task) : groqForTask(task)) : groqForTask(task),
+    primary: hasGemini() ? geminiForTask(task) : hasBai() ? baiForTask(task) : groqForTask(task),
+    fallback: hasGemini() ? (hasBai() ? baiForTask(task) : groqForTask(task)) : groqForTask(task),
 });

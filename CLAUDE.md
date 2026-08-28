@@ -96,6 +96,6 @@ Server needs: `PORT`, `SERVER_JWT_SECRET`, `DATABASE_URL`, `GITHUB_CLIENT_ID`, `
 
 Optional: `REDIS_URL`, `EMBED_MODEL`, `BAI_API_KEY`, `BAI_BASE_URL`, `GEMINI_API_KEY`, `EXA_API`.
 
-`BAI_API_KEY` enables BAI's `glm-5.3-flash` model as the primary LLM provider. It has a 30-second request timeout and no provider retries before falling back to Gemini and Groq. `BAI_BASE_URL` optionally overrides the default BAI API endpoint.
+`GEMINI_API_KEY` enables Gemini as the primary LLM provider. When configured, BAI's `glm-5.3-flash` is the first fallback, followed by Groq. BAI requests have a 30-second timeout and no provider retries. `BAI_BASE_URL` optionally overrides the default BAI API endpoint.
 
 Web needs: `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_API_URL`.

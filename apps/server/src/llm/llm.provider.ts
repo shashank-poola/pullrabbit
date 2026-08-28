@@ -6,6 +6,24 @@ import type { GROQ_DEFAULTS } from "./models/groq.models";
 
 type Task = keyof typeof GROQ_DEFAULTS;
 
+const responseContentToString = (content: unknown): string => {
+    if (typeof content === "string") return content;
+    if (Array.isArray(content)) {
+        return content.map((block) => {
+            if (
+                typeof block === "object" &&
+                block !== null &&
+                "text" in block &&
+                typeof block.text === "string"
+            ) {
+                return block.text;
+            }
+            return JSON.stringify(block);
+        }).join("\n");
+    }
+    return JSON.stringify(content);
+};
+
 export const invokeLLM = async (
     messages: BaseLanguageModelInput,
     task: Task = "codeReview"
@@ -13,7 +31,7 @@ export const invokeLLM = async (
     if (hasBai()) {
         try {
             const response = await baiForTask(task).invoke(messages);
-            return { content: response.content as string, provider: "bai" };
+            return { content: responseContentToString(response.content), provider: "bai" };
         } catch (err) {
             console.warn(`BAI failed for [${task}], falling back to configured providers:`, (err as Error).message);
         }
@@ -22,7 +40,7 @@ export const invokeLLM = async (
     if (hasGemini()) {
         try {
             const response = await geminiForTask(task).invoke(messages);
-            return { content: response.content as string, provider: "gemini" };
+            return { content: responseContentToString(response.content), provider: "gemini" };
         } catch (err) {
             console.warn(`Gemini failed for [${task}], falling back to Groq:`, (err as Error).message);
         }
@@ -30,7 +48,7 @@ export const invokeLLM = async (
 
     try {
         const response = await groqForTask(task).invoke(messages);
-        return { content: response.content as string, provider: "groq" };
+        return { content: responseContentToString(response.content), provider: "groq" };
     } catch (err) {
         console.warn(`Groq failed for [${task}]:`, (err as Error).message);
         throw new Error(`All LLM providers failed for task: ${task}`);
@@ -39,5 +57,5 @@ export const invokeLLM = async (
 
 export const getLLM = (task: Task = "codeReview") => ({
     primary: hasBai() ? baiForTask(task) : hasGemini() ? geminiForTask(task) : groqForTask(task),
-    fallback: hasGemini() ? geminiForTask(task) : groqForTask(task),
+    fallback: hasBai() ? (hasGemini() ? geminiForTask(task) : groqForTask(task)) : groqForTask(task),
 });

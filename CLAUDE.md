@@ -94,8 +94,8 @@ packages/
 
 Server needs: `PORT`, `SERVER_JWT_SECRET`, `DATABASE_URL`, `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SERVER`, `GITHUB_CALLBACK_URL`, `GITHUB_APP_ID`, `GITHUB_APP_NAME`, `GITHUB_APP_CLIENT_ID`, `GITHUB_APP_CLIENT_SECRET`, `GITHUB_WEBHOOK_SECRET`, `GITHUB_PRIVATE_KEY`, `QDRANT_URL`, `QDRANT_CLUSTER_ID`.
 
-Optional: `REDIS_URL`, `EMBED_MODEL`, `BAI_API_KEY`, `GEMINI_API_KEY`, `EXA_API`.
+Optional: `REDIS_URL`, `EMBED_MODEL`, `BAI_API_KEY`, `BAI_BASE_URL`, `GEMINI_API_KEY`, `EXA_API`.
 
-`BAI_API_KEY` enables BAI's `glm-5.3-flash` model as the primary LLM provider. Gemini and Groq remain automatic fallbacks.
+`BAI_API_KEY` enables BAI's `glm-5.3-flash` model as the primary LLM provider. It has a 30-second request timeout and no provider retries before falling back to Gemini and Groq. `BAI_BASE_URL` optionally overrides the default BAI API endpoint.
 
 Web needs: `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_API_URL`.

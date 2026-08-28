@@ -4,6 +4,7 @@ import type { GROQ_DEFAULTS } from "./models/groq.models";
 
 export const BAI_MODEL = "glm-5.3-flash";
 const BAI_BASE_URL = "https://api.b.ai/v1";
+const BAI_TIMEOUT_MS = 30_000;
 
 export const hasBai = (): boolean => Boolean(env.BAI_API_KEY);
 
@@ -14,6 +15,8 @@ export const baiForTask = (_task: keyof typeof GROQ_DEFAULTS) => {
         apiKey: env.BAI_API_KEY,
         model: BAI_MODEL,
         temperature: 0.1,
-        configuration: { baseURL: BAI_BASE_URL },
+        timeout: BAI_TIMEOUT_MS,
+        maxRetries: 0,
+        configuration: { baseURL: env.BAI_BASE_URL ?? BAI_BASE_URL },
     });
 };

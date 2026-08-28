@@ -36,7 +36,20 @@ const parseRedisUrl = (url: string) => {
     };
 };
 
-const redisUrl = process.env.REDIS_URL ?? "redis://127.0.0.1:6379";
+const resolveRedisUrl = () => {
+    const configuredUrl = process.env.REDIS_URL?.trim();
+    if (configuredUrl) {
+        return configuredUrl;
+    }
+
+    if (process.env.NODE_ENV === "production") {
+        throw new Error("REDIS_URL is required in production for the BullMQ review queue");
+    }
+
+    return "redis://127.0.0.1:6379";
+};
+
+const redisUrl = resolveRedisUrl();
 const connection = parseRedisUrl(redisUrl);
 
 export const reviewQueue = new Queue<ReviewJobData>("github_pr_review", {

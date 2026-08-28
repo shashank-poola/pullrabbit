@@ -1,7 +1,17 @@
 import { describe, expect, test } from "bun:test";
-import { parseRedisUrl } from "../worker.utils";
+import { parseRedisUrl, resolveRedisUrl } from "../worker.utils";
 
-describe("parseRedisUrl", () => {
+describe("Redis configuration", () => {
+  test("uses the configured URL and requires one in production", () => {
+    expect(
+      resolveRedisUrl({ REDIS_URL: "rediss://default:password@cache.internal:6379" }),
+    ).toBe("rediss://default:password@cache.internal:6379");
+
+    expect(() => resolveRedisUrl({ NODE_ENV: "production" })).toThrow(
+      "REDIS_URL is required in production",
+    );
+  });
+
   test("parses host, port, username, and decoded password from Redis URLs", () => {
     expect(parseRedisUrl("redis://reviewer:p%40ss@cache.internal:6380")).toEqual({
       host: "cache.internal",

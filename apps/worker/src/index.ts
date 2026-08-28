@@ -4,7 +4,7 @@ import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 import { Worker } from "bullmq";
 import type { ReviewJobData } from "../../server/src/queue/review.queue";
-import { parseRedisUrl } from "./worker.utils";
+import { parseRedisUrl, resolveRedisUrl } from "./worker.utils";
 import { processReviewJob } from "./review.worker";
 import { REVIEW_RECOVERY_INTERVAL_MS } from "./review.constants";
 import { recoverReviewSessions } from "./review.recovery";
@@ -23,7 +23,7 @@ for (const envPath of envPaths) {
   }
 }
 
-const connection = parseRedisUrl(process.env.REDIS_URL ?? "redis://127.0.0.1:6379");
+const connection = parseRedisUrl(resolveRedisUrl());
 
 const worker = new Worker<ReviewJobData>(
   "github_pr_review",

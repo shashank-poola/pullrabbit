@@ -11,6 +11,21 @@ const DEFAULT_REDIS_CONNECTION: RedisConnection = {
   port: 6379,
 };
 
+export function resolveRedisUrl(
+  env: Readonly<Record<string, string | undefined>> = process.env,
+): string {
+  const configuredUrl = env.REDIS_URL?.trim();
+  if (configuredUrl) {
+    return configuredUrl;
+  }
+
+  if (env.NODE_ENV === "production") {
+    throw new Error("REDIS_URL is required in production for the BullMQ review worker");
+  }
+
+  return "redis://127.0.0.1:6379";
+}
+
 export function parseRedisUrl(url: string): RedisConnection {
   const parsed = new URL(url);
 

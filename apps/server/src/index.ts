@@ -12,6 +12,8 @@ type RawBodyRequest = Request & {
 
 const ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "https://openmerge.site",
+    "https://www.openmerge.site",
     ...(env.NEXT_PUBLIC_APP_URL ? [env.NEXT_PUBLIC_APP_URL] : []),
 ];
 

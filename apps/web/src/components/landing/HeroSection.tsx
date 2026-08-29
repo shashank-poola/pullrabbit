@@ -10,7 +10,7 @@ export function HeroSection() {
         Open source PR reviews for teams who ship
       </div>
 
-      <h1 className="relative z-10 mx-auto mt-7 max-w-[820px] font-bricolage text-[clamp(3rem,7vw,6.25rem)] font-bold leading-[0.94] tracking-[-0.065em] text-[#171717]">
+      <h1 className="relative z-10 mx-auto mt-7 max-w-[820px] font-pixel text-[clamp(1rem,13vw,6rem)] leading-[0.94] tracking-[-0.065em] text-[#171717]">
         AI code review for
         <br />
         <span className="text-[#2764d8]">every pull request.</span>

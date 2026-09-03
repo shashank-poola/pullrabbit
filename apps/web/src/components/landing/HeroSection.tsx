@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowUpRight01Icon, PlayCircle02Icon } from "@hugeicons/core-free-icons";
+import { ArrowUpRight01Icon } from "@hugeicons/core-free-icons";
+import { DemoVideo } from "./DemoVideo";
 
 export function HeroSection() {
   return (
@@ -37,11 +38,8 @@ export function HeroSection() {
         </Link>
       </div>
 
-      <div id="demo" className="mx-auto mt-20 flex aspect-video max-w-[820px] items-center justify-center rounded-[24px] border border-dashed border-[#dcdcd8] bg-[#fafaf8] text-center shadow-[0_15px_40px_rgba(23,23,23,0.035)]" aria-label="Demo video placeholder">
-        <div className="flex flex-col items-center gap-3 text-[#81817b]">
-          <HugeiconsIcon icon={PlayCircle02Icon} size={34} strokeWidth={1.4} aria-hidden="true" />
-          <span className="text-[13px] font-medium">Demo video</span>
-        </div>
+      <div id="demo" className="mx-auto mt-20 max-w-[820px] overflow-hidden rounded-[24px] border border-[#dcdcd8] bg-[#fafaf8] shadow-[0_15px_40px_rgba(23,23,23,0.035)]">
+        <DemoVideo />
       </div>
     </section>
   );

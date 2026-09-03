@@ -9,6 +9,7 @@ import { AuthFrame } from "./AuthFrame";
 
 const GITHUB_INSTALL_URL =
   "https://github.com/apps/openmerge-app/installations/select_target";
+const PENDING_INSTALLATION_ID_KEY = "openmerge_pending_installation_id";
 
 export function GithubCallbackPage() {
   const searchParams = useSearchParams();
@@ -33,7 +34,15 @@ export function GithubCallbackPage() {
       .then((data: { success: boolean; token?: string; error?: string }) => {
         if (data.success && data.token) {
           localStorage.setItem("pr_token", data.token);
-          window.location.href = GITHUB_INSTALL_URL;
+          const pendingInstallationId = sessionStorage.getItem(PENDING_INSTALLATION_ID_KEY);
+          if (pendingInstallationId) {
+            sessionStorage.removeItem(PENDING_INSTALLATION_ID_KEY);
+            window.location.href = `/setup?installation_id=${encodeURIComponent(pendingInstallationId)}`;
+            return;
+          }
+
+          const isLocalDevelopment = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+          window.location.href = isLocalDevelopment ? "/dashboard" : GITHUB_INSTALL_URL;
         } else {
           setError(data.error ?? "Authentication failed.");
         }

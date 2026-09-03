@@ -8,6 +8,7 @@ import { INSTALLATIONS_CALLBACK_URL } from "@/routes/apiRoute";
 import { AuthFrame } from "@/components/auth/AuthFrame";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+const PENDING_INSTALLATION_ID_KEY = "openmerge_pending_installation_id";
 
 type State = "loading" | "success" | "error" | "no_id";
 
@@ -31,6 +32,7 @@ export function SetupCallbackPage() {
 
     const token = localStorage.getItem("pr_token");
     if (!token) {
+      sessionStorage.setItem(PENDING_INSTALLATION_ID_KEY, installationId);
       window.location.href = `${API_BASE}/api/v1/auth/github`;
       return;
     }
@@ -47,7 +49,7 @@ export function SetupCallbackPage() {
       .then((data: { success: boolean; error?: string }) => {
         if (data.success) {
           setState("success");
-          setTimeout(() => router.push("/"), 2500);
+          setTimeout(() => router.push("/dashboard"), 2500);
         } else {
           setState("error");
           setErrorMsg(data.error ?? "Installation failed.");
@@ -76,7 +78,7 @@ export function SetupCallbackPage() {
           <>
             <div className="mx-auto grid size-14 place-items-center rounded-2xl bg-[#e8f7ed] text-[#198b4d]"><HugeiconsIcon icon={CheckmarkCircle02Icon} size={27} strokeWidth={1.7} aria-hidden="true" /></div>
             <h1 className="mt-6 font-pixel text-3xl font-semibold tracking-[-0.04em]">You are connected.</h1>
-            <p className="mt-3 text-[14px] leading-6 text-[#696965]">OpenMerge is ready to review pull requests. Taking you home now.</p>
+            <p className="mt-3 text-[14px] leading-6 text-[#696965]">OpenMerge is ready to review pull requests. Taking you to your workspace now.</p>
           </>
         )}
 

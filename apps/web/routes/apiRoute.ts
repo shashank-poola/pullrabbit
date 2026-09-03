@@ -9,4 +9,7 @@ export const CHECK_HEALTH_URL = AUTH_URL + '/check-health';
 export const INSTALLATIONS_URL = API_URL + '/installations';
 export const INSTALLATIONS_CALLBACK_URL = INSTALLATIONS_URL + '/callback';
 
+export const REPOS_URL = API_URL + '/repos';
+export const DASHBOARD_URL = API_URL + '/dashboard';
+
 export const GITHUB_EXCHANGE_URL = AUTH_URL + '/github/exchange';
